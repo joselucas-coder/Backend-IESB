@@ -48,5 +48,4 @@ function multiplicação(a,b){
     return a*b
 }
 
-
 export { soma, subtração, multiplicação, divisão };
