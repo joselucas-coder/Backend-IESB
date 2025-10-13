@@ -1,5 +1,5 @@
 // controllers/tarefaController.js
-const model = require("../models/tarefaModel");
+const model = require("./");
 
 const listarTarefas = async (req, res) => {
   try {

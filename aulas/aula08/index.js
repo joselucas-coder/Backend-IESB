@@ -44,7 +44,7 @@ async function main() {
     console.log("4 - Remover Tarefa");
     console.log("5 - Sair");
 
-    const opcao = readline.question("Escolha uma opcão: ");
+    const opcao = readline.question("Escolha uma opcao: ");
 
     switch(opcao){
         case '1': {
@@ -70,7 +70,7 @@ async function main() {
         break;
         };
         case '5': process.exit(0);
-        defaut: console.log("Opção Invalida")
+        defaut: console.log("Opçao Invalida")
     }
     }
 }
