@@ -1,6 +1,8 @@
 const {MongoClient} = require("mongodb");
 
-const url = "mongodb+srv://aula06:15jlucas.@cluster0.n10h68u.mongodb.net/";
+
+require("dotenv").config()
+const url = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_HOST}/`;
 const client = new MongoClient(url);
 
 async function conectarDb() {
