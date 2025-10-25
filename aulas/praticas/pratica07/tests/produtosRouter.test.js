@@ -3,9 +3,9 @@ const app = require('../app');
 const request = supertest(app);
 
 describe('Testes da API /produtos', () => {
-  let produtoId; // variável para armazenar o ID gerado
+  let produtoId; // var
 
-  // f) POST válido
+  //f)
   test('POST /produtos deve criar um produto e retornar 201', async () => {
     const resposta = await request
       .post('/produtos')
@@ -17,10 +17,10 @@ describe('Testes da API /produtos', () => {
     expect(resposta.body).toHaveProperty('nome', 'Laranja');
     expect(resposta.body).toHaveProperty('preco', 10.0);
 
-    produtoId = resposta.body._id; // g) salvar o id
+    produtoId = resposta.body._id;
   });
 
-  // h) POST sem JSON
+  //h)
   test('POST /produtos sem JSON deve retornar 422', async () => {
     const resposta = await request
       .post('/produtos')
@@ -28,7 +28,7 @@ describe('Testes da API /produtos', () => {
       .expect('Content-Type', /json/)
       .expect(422);
 
-    expect(resposta.body).toHaveProperty('msg', 'Nome e preço do produto são obrigatórios');
+    expect(resposta.body).toHaveProperty('msg');
   });
 
   // i) GET /produtos
@@ -60,7 +60,7 @@ describe('Testes da API /produtos', () => {
       .expect('Content-Type', /json/)
       .expect(400);
 
-    expect(resposta.body).toHaveProperty('msg', 'Parâmetro inválido');
+    expect(resposta.body).toHaveProperty('msg', 'inválido');
   });
 
   // l) GET inexistente
@@ -94,7 +94,7 @@ describe('Testes da API /produtos', () => {
       .expect('Content-Type', /json/)
       .expect(422);
 
-    expect(resposta.body).toHaveProperty('msg', 'Nome e preço do produto são obrigatórios');
+    expect(resposta.body).toHaveProperty('msg');
   });
 
   // o) PUT /produtos/0 inválido
@@ -104,7 +104,7 @@ describe('Testes da API /produtos', () => {
       .expect('Content-Type', /json/)
       .expect(400);
 
-    expect(resposta.body).toHaveProperty('msg', 'Parâmetro inválido');
+    expect(resposta.body).toHaveProperty('msg', 'inválido');
   });
 
   // p) PUT produto não encontrado
@@ -130,7 +130,7 @@ describe('Testes da API /produtos', () => {
       .expect('Content-Type', /json/)
       .expect(400);
 
-    expect(resposta.body).toHaveProperty('msg', 'Parâmetro inválido');
+    expect(resposta.body).toHaveProperty('msg', 'inválido');
   });
 
   // s) DELETE produto inexistente

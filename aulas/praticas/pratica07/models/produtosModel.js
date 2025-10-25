@@ -4,7 +4,7 @@ const schema = new mongoose.Schema({
   nome: {
     type: String,
     required: true,
-    minlength: 3,
+    trim: true,
   },
   preco: {
     type: Number,

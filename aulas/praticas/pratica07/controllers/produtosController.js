@@ -1,88 +1,91 @@
 const mongoose = require('mongoose');
 const Produto = require('../models/produtosModel');
 
-// d) Função criar()
 async function criar(req, res) {
   try {
     const { nome, preco } = req.body;
     const novoProduto = await Produto.create({ nome, preco });
     return res.status(201).json(novoProduto);
   } catch (error) {
-    return res.status(422).json({ msg: 'Nome e preço do produto são obrigatórios' });
+    if (error.name === 'ValidationError') {
+      return res.status(422).json({ msg: error.message });
+    } else {
+      return res.status(500).json({ msg: 'Ocorreu um erro interno.' });
+    }
   }
 }
 
-// h) Função listar()
 async function listar(req, res) {
-  const produtosCadastrados = await Produto.find({});
-  return res.status(200).json(produtosCadastrados);
+  try {
+    const produtosCadastrados = await Produto.find({});
+    return res.status(200).json(produtosCadastrados);
+  } catch (error) {
+    return res.status(500).json({ msg: 'Ocorreu um erro interno.' });
+  }
 }
 
-// k) Função buscar()
 async function buscar(req, res, next) {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  // l) Validar ID
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ msg: 'Parâmetro inválido' });
-  }
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ msg: 'inválido' });
+    }
 
-  const produtoEncontrado = await Produto.findOne({ _id: id });
+    const produtoEncontrado = await Produto.findById(id);
 
-  if (produtoEncontrado) {
-    req.produto = produtoEncontrado;
-    return next();
-  } else {
-    return res.status(404).json({ msg: 'Produto não encontrado' });
+    if (produtoEncontrado) {
+      req.produto = produtoEncontrado;
+      return next();
+    } else {
+      return res.status(404).json({ msg: 'Produto não encontrado' });
+    }
+  } catch (error) {
+    return res.status(500).json({ msg: 'Ocorreu um erro interno.' });
   }
 }
 
-// m) Função exibir()
 function exibir(req, res) {
   return res.status(200).json(req.produto);
 }
 
-// o) Função atualizar()
 async function atualizar(req, res) {
   const { id } = req.params;
   const { nome, preco } = req.body;
 
-  // ✅ Verifica se os campos obrigatórios foram enviados
-  if (!nome || preco === undefined) {
+  if (nome === undefined && preco === undefined) {
     return res
       .status(422)
       .json({ msg: 'Nome e preço do produto são obrigatórios' });
   }
 
   try {
-    const produtoAtualizado = await Produto.findOneAndUpdate(
-      { _id: id },
+    const produtoAtualizado = await Produto.findByIdAndUpdate(
+      id,
       { nome, preco },
       { runValidators: true, new: true }
     );
 
     return res.status(200).json(produtoAtualizado);
   } catch (error) {
-    return res
-      .status(422)
-      .json({ msg: 'Nome e preço do produto são obrigatórios' });
+    if (error.name === 'ValidationError') {
+      return res.status(422).json({ msg: error.message });
+    } else {
+      return res
+        .status(422)
+        .json({ msg: 'Nome e preço do produto são obrigatórios' });
+    }
   }
 }
 
-
-// s) Função remover()
 async function remover(req, res) {
-  const { id } = req.params;
-  const produtoRemovido = await Produto.findOneAndDelete({ _id: id });
-  return res.status(204).send();
+  try {
+    const { id } = req.params;
+    await Produto.findByIdAndDelete(id);
+    return res.status(204).send();
+  } catch (error) {
+    return res.status(500).json({ msg: 'Ocorreu um erro interno.' });
+  }
 }
 
-// v) Exportar todas as funções
-module.exports = {
-  criar,
-  listar,
-  buscar,
-  exibir,
-  atualizar,
-  remover,
-};
+module.exports = {criar,listar,buscar,exibir,atualizar,remover};

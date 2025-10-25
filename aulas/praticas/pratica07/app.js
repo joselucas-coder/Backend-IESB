@@ -6,11 +6,11 @@ const produtosRouter = require('./routes/produtosRouters');
 const app = express();
 app.use(express.json());
 
-mongoose.connect(
-  `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DATABASE}J`
-)
+const mongoURI = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DATABASE}`;
+
+mongoose.connect(mongoURI)
 .then(() => console.log('Conectado'))
-.catch((err) => console.error('Erro ao Conectar', err));
+.catch((err) => console.error('Erro ao conectar: ', err));
 
 app.use('/produtos', produtosRouter);
 
